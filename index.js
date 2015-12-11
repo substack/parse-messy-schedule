@@ -74,7 +74,7 @@ function Mess (str, opts) {
   this._every = everyf(str, opts.created)
   this._created = opts.created
   this.title = this._every ? str.slice(0, this._every.index).trim().replace(/"/g, '') : null
-  this.oneTime = !this._every.every
+  this.oneTime = Boolean(!(this._every && this._every.every))
   // for X weeks
   // starting X for Y weeks
 }
