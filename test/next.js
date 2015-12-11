@@ -4,6 +4,7 @@ var parse = require('../')
 test('one-off event', function (t) {
   var str = 'DMV tomorrow at 10:30'
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(ev.oneTime, true)
   t.equal(ev.title, 'DMV')
   t.equal(
     ev.next('2015-12-10 03:00').toString().replace(/ GMT.*/, ''),
@@ -20,6 +21,7 @@ test('one-off event', function (t) {
 test('thursdays', function (t) {
   var str = 'javascript study group thursdays at 7 pm'
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(ev.oneTime, false)
   var n = '2015-12-10 03:00', outputs = []
   for (var i = 0; i < 3; i++) {
     n = ev.next(n)
@@ -38,6 +40,7 @@ test('every other starting until', function (t) {
   var str = 'oakland wiki 18:30 every other wednesday'
     + ' starting dec 2 until dec 23'
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(ev.oneTime, false)
   var n = '2015-12-10 03:00', outputs = []
   for (var i = 0; i < 3; i++) {
     n = ev.next(n)
@@ -54,6 +57,7 @@ test('every other starting until', function (t) {
 test('every day', function (t) {
   var str = 'every day at 7 pm'
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(ev.oneTime, false)
   var n = '2015-12-10 03:00', outputs = []
   for (var i = 0; i < 3; i++) {
     n = ev.next(n)
@@ -71,6 +75,7 @@ test('every day', function (t) {
 test('using quotes to escape titles', function (t) {
   var str = '"linux installfest friday" friday at 21:00'
   var ev = parse(str, { created: new Date('2015-12-09 03:00') })
+  t.equal(ev.oneTime, true)
   t.equal(ev.title, 'linux installfest friday')
   t.equal(
     ev.next('2015-12-09 03:00').toString().replace(/ GMT.*/, ''),
