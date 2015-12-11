@@ -57,6 +57,10 @@ Parse `str`, returning a parse object `m`.
 
 event title
 
+## m.oneTime
+
+boolean, whether the event is a one-time event
+
 ## m.next(base)
 
 Return the next time the event will be held starting from `base`, or now if
