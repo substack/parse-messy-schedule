@@ -105,19 +105,13 @@ Mess.prototype._advance = function (dir, base) {
     } else if ((dir > 0 && t <= base) || (dir < 0 && t >= base)) {
       t.setDate(t.getDate() + 7 * dir)
     }
-    if (this._every.starting && this._every.other) {
-      var w = ((countWeeks(this._every.starting, t) % 2) + 2) % 2
-      if (w % 2 !== 0) t.setDate(t.getDate() + 7 * dir)
-    } else if (this._created && this._every.other) {
-      var w = ((countWeeks(this._created, t) % 2) + 2) % 2
+    if ((this._every.starting || this._created) && this._every.other) {
+      var x = this._every.starting || this._created
+      var w = ((countWeeks(x, t) % 2) + 2) % 2
       if (w % 2 !== 0) t.setDate(t.getDate() + 7 * dir)
     }
-    if (this._every.until && tgt(t, this._every.until)) {
-      return null
-    }
-    if (this._every.starting && tlt(t, this._every.starting)) {
-      return null
-    }
+    if (this._every.until && tgt(t, this._every.until)) return null
+    if (this._every.starting && tlt(t, this._every.starting)) return null
     return t
   } else if (this._every && (this._created || this._every.starting)) {
     var x = this._every.starting || this._created
@@ -130,9 +124,9 @@ Mess.prototype._advance = function (dir, base) {
 }
 
 function tlt (a, b) {
-  return a.getTime() + 1000 <= b.getTime()
+  return a.getTime() + 1000 < b.getTime()
 }
 
 function tgt (a, b) {
-  return a.getTime() - 1000 >= b.getTime()
+  return a.getTime() - 1000 > b.getTime()
 }

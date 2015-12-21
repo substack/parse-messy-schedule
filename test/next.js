@@ -48,8 +48,7 @@ test('every other starting until', function (t) {
     outputs.push(n.toString().replace(/ GMT.*/, ''))
   }
   t.deepEqual(outputs, [
-    'Wed Dec 16 2015 18:30:00',
-    'Wed Dec 23 2015 18:30:00'
+    'Wed Dec 16 2015 18:30:00'
   ])
   t.end()
 })
