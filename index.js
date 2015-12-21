@@ -36,7 +36,7 @@ function everyf (s, now) {
     ) : null,
     time: time,
     day: String(m[7]).toLowerCase(),
-    starting: m[9] ? parset(m[9], { now: now }) : null,
+    starting: m[8] ? parset(m[8], { now: now }) : null,
     until: m[10] ? parset(m[10] + ut, { now: now }) : null,
     index: m.index
   }
@@ -89,15 +89,17 @@ Mess.prototype.prev = function (base) {
 
 Mess.prototype._advance = function (dir, base) {
   if (!base) base = new Date
-  var dx = dir > 0 ? 'this' : 'last'
   if (typeof base === 'string') base = parset(base, { now: this._created })
   if (this._every && this._every.numbered) {
     //...
+  /*
   } else if (this._every && this._every.other && this._every.every
   && (this._every.starting || this._created)) {
     var x = this._every.starting || this._created
-    if (base <= x) base = x
-    var p = countWeeks(x, base) % 2 === 0 ? dx : 'next'
+    if (dir > 0 && base <= x) base = x
+    else if (dir < 0 && base >= x) base = x
+    var w = (countWeeks(x, base) % 2 + 2 + (dir > 0 ? 0 : 1)) % 2
+    var p = w === 0 ? 'this' : 'next'
     var tt = this._every.time ? ' at ' + this._every.time : ''
     var t = parset(p + ' ' + this._every.day + tt, { now: base })
     if (dir > 0 && t <= base) t.setDate(t.getDate() + 14)
@@ -109,24 +111,40 @@ Mess.prototype._advance = function (dir, base) {
       return null
     }
     return t
+  */
   } else if (this._every && this._every.every) {
     var tt = this._every.time ? ' at ' + this._every.time : ''
     var t = this._every.day === 'day'
       ? parset(tt, { now: base })
-      : parset(dx + ' ' + this._every.day + tt, { now: base })
+      : parset('this ' + this._every.day + tt, { now: base })
     if (((dir > 0 && t <= base) || (dir < 0 && t >= base))
     && this._every.day === 'day') {
       t.setDate(t.getDate() + 1 * dir)
     } else if ((dir > 0 && t <= base) || (dir < 0 && t >= base)) {
       t.setDate(t.getDate() + 7 * dir)
     }
+    if (dir > 0 && this._every.until && t - 1000 > this._every.until) {
+      return null
+    } else if (dir < 0 && this._every.until && t + 1000 < this._every.until) {
+      return null
+    }
     if (this._every.until && t - 1000 > this._every.until) return null
+    if (this._every.starting && t + 1000 < this._every.starting) return null
+
+    if (this._every.starting && this._every.other) {
+      var w = ((countWeeks(this._every.starting, t) % 2) + 2) % 2
+      if (w % 2 !== 0) return this._advance(dir, t)
+    } else if (this._created && this._every.other) {
+      var w = ((countWeeks(this._created, t) % 2) + 2) % 2
+      if (w % 2 !== 0) return this._advance(dir, t)
+    }
     return t
   } else if (this._every && (this._created || this._every.starting)) {
     var x = this._every.starting || this._created
     var tt = this._every.time ? ' at ' + this._every.time : ''
-    var t = parset(dx + ' ' + this._every.day + tt, { now: x })
-    if (t <= base) return null
+    var t = parset('this ' + this._every.day + tt, { now: x })
+    if (dir > 0 && t <= base) return null
+    else if (dir < 0 && t >= base) return null
     return t
   }
 }
