@@ -36,3 +36,20 @@ test('previous every day', function (t) {
   ])
   t.end()
 })
+
+test('previous every other starting until', function (t) {
+  var str = 'oakland wiki 18:30 every other wednesday'
+    + ' starting dec 2 until dec 23'
+  var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(ev.oneTime, false)
+  var n = '2015-12-10 03:00', outputs = []
+  for (var i = 0; i < 3; i++) {
+    n = ev.prev(n)
+    if (!n) break
+    outputs.push(n.toString().replace(/ GMT.*/, ''))
+  }
+  t.deepEqual(outputs, [
+    'Wed Dec 02 2015 18:30:00'
+  ])
+  t.end()
+})
