@@ -80,7 +80,16 @@ function Mess (str, opts) {
 }
 
 Mess.prototype.next = function (base) {
+  return this._advance(1, base)
+}
+
+Mess.prototype.prev = function (base) {
+  return this._advance(-1, base)
+}
+
+Mess.prototype._advance = function (dir, base) {
   if (!base) base = new Date
+  var dx = dir > 0 ? 'this' : 'last'
   if (typeof base === 'string') base = parset(base, { now: this._created })
   if (this._every && this._every.numbered) {
     //...
@@ -88,26 +97,35 @@ Mess.prototype.next = function (base) {
   && (this._every.starting || this._created)) {
     var x = this._every.starting || this._created
     if (base <= x) base = x
-    var p = countWeeks(x, base) % 2 === 0 ? 'this' : 'next'
+    var p = countWeeks(x, base) % 2 === 0 ? dx : 'next'
     var tt = this._every.time ? ' at ' + this._every.time : ''
     var t = parset(p + ' ' + this._every.day + tt, { now: base })
-    if (t <= base) t.setDate(t.getDate() + 14)
-    if (this._every.until && t - 1000 > this._every.until) return null
+    if (dir > 0 && t <= base) t.setDate(t.getDate() + 14)
+    else if (dir < 0 && t >= base) t.setDate(t.getDate() - 14)
+    if (dir > 0 && this._every.until && t - 1000 > this._every.until) {
+      return null
+    }
+    else if (dir < 0 && this._every.until && t + 1000 < this._every.until) {
+      return null
+    }
     return t
   } else if (this._every && this._every.every) {
     var tt = this._every.time ? ' at ' + this._every.time : ''
     var t = this._every.day === 'day'
       ? parset(tt, { now: base })
-      : parset('this ' + this._every.day + tt, { now: base })
-    if (t <= base && this._every.day === 'day') {
-      t.setDate(t.getDate() + 1)
-    } else if (t <= base) t.setDate(t.getDate() + 7)
+      : parset(dx + ' ' + this._every.day + tt, { now: base })
+    if (((dir > 0 && t <= base) || (dir < 0 && t >= base))
+    && this._every.day === 'day') {
+      t.setDate(t.getDate() + 1 * dir)
+    } else if ((dir > 0 && t <= base) || (dir < 0 && t >= base)) {
+      t.setDate(t.getDate() + 7 * dir)
+    }
     if (this._every.until && t - 1000 > this._every.until) return null
     return t
   } else if (this._every && (this._created || this._every.starting)) {
     var x = this._every.starting || this._created
     var tt = this._every.time ? ' at ' + this._every.time : ''
-    var t = parset('this ' + this._every.day + tt, { now: x })
+    var t = parset(dx + ' ' + this._every.day + tt, { now: x })
     if (t <= base) return null
     return t
   }

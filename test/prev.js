@@ -12,9 +12,9 @@ test('previous wednesday', function (t) {
     outputs.push(n.toString().replace(/ GMT.*/, ''))
   }
   t.deepEqual(outputs, [
-    'Thu Dec 09 2015 19:00:00',
-    'Thu Dec 02 2015 19:00:00',
-    'Thu Nov 25 2015 19:00:00'
+    'Wed Dec 09 2015 19:00:00',
+    'Wed Dec 02 2015 19:00:00',
+    'Wed Nov 25 2015 19:00:00'
   ])
   t.end()
 })
