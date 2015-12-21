@@ -66,6 +66,11 @@ boolean, whether the event is a one-time event
 Return the next time the event will be held starting from `base`, or now if
 `base` isn't given.
 
+## m.prev(base)
+
+Return the last time the event was held starting from `base`, or now if `base`
+isn't given.
+
 # install
 
 ```
