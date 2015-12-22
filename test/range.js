@@ -38,6 +38,15 @@ test('lower-bounded range', function (t) {
   t.end()
 })
 
+test('double-bounded range', function (t) {
+  var str = 'oakland wiki 18:30 every other wednesday'
+    + ' starting nov 25 until dec 23'
+  var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(dstr(ev.range[0]), '2015-11-25 18:30:00')
+  t.equal(dstr(ev.range[1]), '2015-12-23 18:30:00')
+  t.end()
+})
+
 function dstr (d) {
   return strftime('%F %T', d)
 }
