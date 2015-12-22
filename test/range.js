@@ -7,7 +7,7 @@ test('one-time range', function (t) {
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
   t.equal(ev.oneTime, true)
   t.equal(dstr(ev.range[0]), '2015-12-11 10:30:00')
-  t.equal(dstr(ev.range[1]), '2015-12011 10:30:00')
+  t.equal(dstr(ev.range[1]), '2015-12-11 10:30:00')
   t.end()
 })
 

@@ -79,8 +79,10 @@ function Mess (str, opts) {
   this.oneTime = Boolean(!(this._every && this._every.every))
   this.range = [ new Date('0000-01-01'), new Date('275760-09-12') ]
   if (this.oneTime) {
-    this.range[0] = this._every.time
-    this.range[1] = this._every.time
+    var t = this.next(this._created)
+    if (!t) t = this.prev(this._created)
+    this.range[0] = t
+    this.range[1] = t
   }
   if (this._every.starting) {
     this.range[0] = this._every.starting
