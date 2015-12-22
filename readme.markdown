@@ -57,6 +57,14 @@ Parse `str`, returning a parse object `m`.
 
 event title
 
+## m.range[0]
+
+lower-bound date of event range
+
+## m.range[1]
+
+upper-bound date of event range
+
 ## m.oneTime
 
 boolean, whether the event is a one-time event
