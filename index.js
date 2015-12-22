@@ -77,8 +77,17 @@ function Mess (str, opts) {
   this._created = opts.created
   this.title = this._every ? str.slice(0, this._every.index).trim().replace(/"/g, '') : null
   this.oneTime = Boolean(!(this._every && this._every.every))
-  // for X weeks
-  // starting X for Y weeks
+  this.range = [ new Date('0000-01-01'), new Date('275760-09-12') ]
+  if (this.oneTime) {
+    this.range[0] = this._every.time
+    this.range[1] = this._every.time
+  }
+  if (this._every.starting) {
+    this.range[0] = this._every.starting
+  }
+  if (this._every.until) {
+    this.range[01] = this._every.until
+  }
 }
 
 Mess.prototype.next = function (base) {
