@@ -1,5 +1,6 @@
 var test = require('tape')
 var parse = require('../')
+var strftime = require('strftime')
 
 test('one-off event', function (t) {
   var str = 'DMV tomorrow at 10:30'
@@ -99,5 +100,16 @@ test('using quotes to escape titles', function (t) {
     'Fri Dec 11 2015 21:00:00'
   )
   t.equal(ev.next('2015-12-12 10:00'), null)
+  t.end()
+})
+
+test('every every', function (t) {
+  var str = 'every body dance each friday at 3pm'
+  var ev = parse(str)
+  t.equal(ev.title, 'every body dance')
+  t.equal(
+    strftime('%F %T', ev.next('2015-12-09 12:00')),
+    '2015-12-11 15:00:00'
+  )
   t.end()
 })
