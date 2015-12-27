@@ -113,3 +113,14 @@ test('every every', function (t) {
   )
   t.end()
 })
+
+test('taco tuesdays', function (t) {
+  var str = 'taco tuesdays each tuesday at 6pm'
+  var ev = parse(str)
+  t.equal(ev.title, 'taco tuesdays')
+  t.equal(
+    strftime('%F %T', ev.next('2015-12-09 12:00')),
+    '2015-12-15 18:00:00'
+  )
+  t.end()
+})
