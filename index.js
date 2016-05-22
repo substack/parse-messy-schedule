@@ -81,13 +81,16 @@ function Mess (str, opts) {
   if (this.oneTime) {
     var t = this.next(this._created)
     if (!t) t = this.prev(this._created)
+    if (!t) {
+      t = parset(str)
+    }
     this.range[0] = t
     this.range[1] = t
   }
-  if (this._every.starting) {
+  if (this._every && this._every.starting) {
     this.range[0] = this._every.starting
   }
-  if (this._every.until) {
+  if (this._every && this._every.until) {
     this.range[01] = this._every.until
   }
 }
