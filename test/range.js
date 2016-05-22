@@ -47,6 +47,15 @@ test('double-bounded range', function (t) {
   t.end()
 })
 
+test('single event', function (t) {
+  var str = 'sunday may 22nd'
+  var ev = parse(str, { created: new Date('2016-05-21') })
+  t.equal(dstr(ev.range[0]), '2016-05-22 00:00:00')
+  t.equal(dstr(ev.range[1]), '2016-05-22 00:00:00')
+  t.end()
+})
+
+
 function dstr (d) {
   return strftime('%F %T', d)
 }
