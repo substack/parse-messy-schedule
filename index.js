@@ -26,8 +26,12 @@ function everyf (s, now) {
   if (!m) return m
   var time = m[1] || m[8] || null
   var ut = time && !re.time.test(m[10]) ? ' ' + time : ''
+  if (ut) ut = ut.replace(/\b(starting|until).*/, '')
   var mst = re.starting.exec(s)
+  if (mst) mst = mst[1].split(/\buntil\b/i)[0]
   var ust = re.until.exec(s)
+  if (ust) ust = ust[1].split(/\bstarting\b/i)[0]
+
   return {
     every: Boolean(m[2] || /days$/i.test(m[7])),
     other: Boolean(m[3]),
@@ -38,8 +42,8 @@ function everyf (s, now) {
     ) : null,
     time: time,
     day: String(m[7]).toLowerCase(),
-    starting: mst ? parset(mst[1] + ut, { now: now }) : null,
-    until: ust ? parset(ust[1] + ut, { now: now }) : null,
+    starting: mst ? parset(mst + ut, { now: now }) : null,
+    until: ust ? parset(ust + ut, { now: now }) : null,
     index: m.index
   }
 }
@@ -91,7 +95,7 @@ function Mess (str, opts) {
     this.range[0] = this._every.starting
   }
   if (this._every && this._every.until) {
-    this.range[01] = this._every.until
+    this.range[1] = this._every.until
   }
 }
 
