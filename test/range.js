@@ -55,6 +55,13 @@ test('single event', function (t) {
   t.end()
 })
 
+test('every day range', function (t) {
+  var str = 'every day at 12:00 starting jan 15 until feb 10'
+  var ev = parse(str, { created: new Date('2015-12-25') })
+  t.equal(dstr(ev.range[0]), '2016-01-15 12:00:00')
+  t.equal(dstr(ev.range[0]), '2016-02-10 12:00:00')
+  t.end()
+})
 
 function dstr (d) {
   return strftime('%F %T', d)
