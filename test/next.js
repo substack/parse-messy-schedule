@@ -2,7 +2,7 @@ var test = require('tape')
 var parse = require('../')
 var strftime = require('strftime')
 
-test('one-off event', function (t) {
+test('one-off event (tomorrow)', function (t) {
   var str = 'DMV tomorrow at 10:30'
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
   t.equal(ev.oneTime, true)
@@ -18,6 +18,24 @@ test('one-off event', function (t) {
   t.equal(ev.next('2015-12-11 11:00'), null)
   t.end()
 })
+
+test('one-off event (day)', function (t) {
+  var str = 'DMV friday at 10:30'
+  var ev = parse(str, { created: new Date('2015-12-10 03:00') })
+  t.equal(ev.oneTime, true)
+  t.equal(ev.title, 'DMV')
+  t.equal(
+    ev.next('2015-12-10 03:00').toString().replace(/ GMT.*/, ''),
+    'Fri Dec 11 2015 10:30:00'
+  )
+  t.equal(
+    ev.next('2015-12-11 10:00').toString().replace(/ GMT.*/, ''),
+    'Fri Dec 11 2015 10:30:00'
+  )
+  t.equal(ev.next('2015-12-11 11:00'), null)
+  t.end()
+})
+
 
 test('thursdays', function (t) {
   var str = 'javascript study group thursdays at 7 pm'
