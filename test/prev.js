@@ -1,4 +1,5 @@
 var test = require('tape')
+var strftime = require('strftime')
 var parse = require('../')
 
 test('previous wednesday', function (t) {
@@ -69,5 +70,14 @@ test('previous every other starting until earlier', function (t) {
     'Wed Dec 02 2015 18:30:00',
     'Wed Nov 18 2015 18:30:00'
   ])
+  t.end()
+})
+
+test('every day next/prev', function (t) {
+  var str = 'every day at 12:00 starting jan 15 until feb 10'
+  var ev = parse(str, { created: new Date('2015-12-25') })
+  var d = new Date('2016-01-20')
+  t.equal(strftime('%F %T', ev.next(d)), '2016-01-20 12:00:00')
+  t.equal(strftime('%F %T', ev.prev(d)), '2016-01-19 12:00:00')
   t.end()
 })
