@@ -17,7 +17,7 @@
   "author": "substack",
   "license": "BSD",
   "dependencies": {
-    "parse-messy-time": "^1.2.1"
+    "parse-messy-time": "^2.0.0"
   },
   "devDependencies": {
     "strftime": "^0.9.2",
