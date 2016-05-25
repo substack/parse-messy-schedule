@@ -17,6 +17,11 @@ re.every = RegExp(
   + '\\s*$',
   'i'
 )
+re.titleBreak = RegExp(
+  '\\b(each|every|tomorrow|'
+  + '(?:mon|tues?|wed(?:nes)?|thurs?|fri|sat(?:ur)?|sun)(?:days?)?'
+  + ')\\b', 'i'
+)
 re.starting = /\b(?:starting|from)\s+(.+)/
 re.until = /\b(?:until|to)\s+(.+)/
 
@@ -79,7 +84,19 @@ function Mess (str, opts) {
   if (!opts) opts = {}
   this._every = everyf(str, opts.created)
   this._created = opts.created
-  this.title = this._every ? str.slice(0, this._every.index).trim().replace(/"/g, '') : null
+
+  this.title = this._every
+    ? str.slice(0, this._every.index).trim().replace(/"/g, '')
+    : null
+  if (this.title) {
+    var esp = str.split(re.titleBreak)
+    var mstr = esp.slice(0,-4).join('').trim()
+    if (mstr.length > this.title.length) {
+      this.title = mstr
+      var m = /(['"])([^\1]+)\1/.exec(this.title)
+      if (m) this.title = m[2]
+    }
+  }
   this.oneTime = Boolean(!(this._every && this._every.every))
   this.range = [ new Date(-864e13), new Date(864e13) ]
   if (this.oneTime) {
