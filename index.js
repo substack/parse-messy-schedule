@@ -97,6 +97,10 @@ function Mess (str, opts) {
   if (this._every && this._every.until) {
     this.range[1] = this._every.until
   }
+  if (this.range[0] > this.range[1]
+  && this.range[0].getFullYear()-1 === this.range[1].getFullYear()) {
+    this.range[0].setYear(this.range[0].getFullYear()-1)
+  }
 }
 
 Mess.prototype.next = function (base) {
