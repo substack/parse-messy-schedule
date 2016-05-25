@@ -73,11 +73,11 @@ test('previous every other starting until earlier', function (t) {
   t.end()
 })
 
-test('every day next/prev', function (t) {
+test.only('every day next/prev', function (t) {
   var str = 'every day at 12:00 starting jan 15 until feb 10'
   var ev = parse(str, { created: new Date('2015-12-25') })
-  var d = new Date('2016-01-20')
-  t.equal(strftime('%F %T', ev.next(d)), '2016-01-20 12:00:00')
-  t.equal(strftime('%F %T', ev.prev(d)), '2016-01-19 12:00:00')
+  var d = new Date('2016-01-20 00:00')
+  t.equal(strftime('%F %T', ev.next(d)), '2016-01-20 12:00:00', 'next')
+  t.equal(strftime('%F %T', ev.prev(d)), '2016-01-19 12:00:00', 'prev')
   t.end()
 })
