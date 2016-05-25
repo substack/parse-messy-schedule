@@ -149,9 +149,8 @@ test('every day next', function (t) {
   var d = new Date('2016-01-01 00:00')
   var dates = []
   for (var i = 0; i < 20; i++) {
-    var n = ev.next(d)
-    dates.push(strftime('%F %T', n))
-    d = n
+    d = ev.next(d)
+    dates.push(strftime('%F %T', d))
   }
   t.deepEqual(dates, [
     '2016-01-15 12:00:00',
@@ -170,7 +169,7 @@ test('every day next', function (t) {
     '2016-01-28 12:00:00',
     '2016-01-29 12:00:00',
     '2016-01-30 12:00:00',
-    '2016-01-30 12:00:00',
+    '2016-01-31 12:00:00',
     '2016-02-01 12:00:00',
     '2016-02-02 12:00:00',
     '2016-02-03 12:00:00'

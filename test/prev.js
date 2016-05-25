@@ -73,7 +73,7 @@ test('previous every other starting until earlier', function (t) {
   t.end()
 })
 
-test.only('every day next/prev', function (t) {
+test('every day next/prev', function (t) {
   var str = 'every day at 12:00 starting jan 15 until feb 10'
   var ev = parse(str, { created: new Date('2015-12-25') })
   var d = new Date('2016-01-20 00:00')

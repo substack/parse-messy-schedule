@@ -135,14 +135,24 @@ Mess.prototype._advance = function (dir, base) {
     //...
   } else if (this._every && this._every.every) {
     var tt = this._every.time ? ' at ' + this._every.time : ''
-    var t
-    if (this._every.day === 'day' && dir > 0 && this._every.starting) {
+    var t = base
+    if (this._every.starting && t < this._every.starting) {
       t = this._every.starting
+    }
+    if (this._every.until && t > this._every.until) {
+      t = this._every.until
+    }
+    /*
+    if (this._every.starting && base < this._every.starting) {
+      t = this._every.starting
+    } else if (this._every.until && base > this._every.until) {
+      t = this._every.until
     } else if (this._every.day === 'day') {
       t = parset(tt, { now: base })
-    } else {
+    } else if (this._every.time.split(/\s+/).length <= 4) {
       t = parset('this ' + this._every.day + tt, { now: base })
     }
+    */
     if (((dir > 0 && t <= base) || (dir < 0 && t >= base))
     && this._every.day === 'day') {
       t.setDate(t.getDate() + 1 * dir)
