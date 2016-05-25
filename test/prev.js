@@ -81,3 +81,22 @@ test('every day next/prev', function (t) {
   t.equal(strftime('%F %T', ev.prev(d)), '2016-01-19 12:00:00', 'prev')
   t.end()
 })
+
+test('every day prev chain', function (t) {
+  var str = 'every day at 12:00 starting jan 15 until feb 10'
+  var ev = parse(str, { created: new Date('2015-12-25') })
+  var dates = []
+  var d = new Date('2016-01-20 00:00')
+  for (var i = 0; i < 5; i++) {
+    d = ev.prev(d)
+    dates.push(strftime('%F %T', d))
+  }
+  t.deepEqual(dates, [
+    '2016-01-19 12:00:00',
+    '2016-01-18 12:00:00',
+    '2016-01-17 12:00:00',
+    '2016-01-16 12:00:00',
+    '2016-01-15 12:00:00'
+  ])
+  t.end()
+})
