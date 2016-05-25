@@ -30,6 +30,7 @@ function everyf (s, now) {
   var m = re.every.exec(s)
   if (!m) return m
   var time = m[1] || m[8] || null
+  if (time) time = time.replace(/\s+(starting|until).*/, '')
   var ut = time && !re.time.test(m[10]) ? ' ' + time : ''
   if (ut) ut = ut.replace(/\b(starting|until).*/, '')
   var mst = re.starting.exec(s)
@@ -45,7 +46,7 @@ function everyf (s, now) {
         m[6] ? [ m[4], m[6] ] :
         [ m[4] ]
     ) : null,
-    time: time.replace(/\s+(starting|until).*/, ''),
+    time: time,
     day: String(m[7]).toLowerCase(),
     starting: mst ? parset(mst + ut, { now: now }) : null,
     until: ust ? parset(ust + ut, { now: now }) : null,
@@ -142,7 +143,7 @@ Mess.prototype._advance = function (dir, base) {
       t = this._every.until
     } else if (this._every.day === 'day') {
       t = parset(tt, { now: base })
-    } else if (this._every.time.split(/\s+/).length <= 4) {
+    } else if (!this._every.time || this._every.time.split(/\s+/).length <= 4) {
       t = parset('this ' + this._every.day + tt, { now: base })
     }
     if (((dir > 0 && t <= base) || (dir < 0 && t >= base))
