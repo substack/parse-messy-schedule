@@ -207,7 +207,7 @@ test('the 15th', function (t) {
   var d = new Date('2016-06-10 00:00')
   var dates = []
   for (var i = 0; i < 10; i++) {
-    d = ev.prev(d)
+    d = ev.next(d)
     dates.push(strftime('%F', d))
   }
   t.deepEqual(dates, [

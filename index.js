@@ -17,6 +17,7 @@ re.every = RegExp(
   + '\\s*$',
   'i'
 )
+re.nth = RegExp('(\\d+)\\s*(?:st|nd|rd|th)\\b')
 re.titleBreak = RegExp(
   '\\b(each|every|tomorrow|'
   + '(?:mon|tues?|wed(?:nes)?|thurs?|fri|sat(?:ur)?|sun)(?:days?)?'
@@ -24,6 +25,14 @@ re.titleBreak = RegExp(
 )
 re.starting = /\b(?:starting|from)\s+(.+)/
 re.until = /\b(?:until|to)\s+(.+)/
+
+function nthf (s) {
+  var m = re.nth.exec(s)
+  if (m) return {
+    n: m[1],
+    time: s.replace(re.nth, '').trim()
+  }
+}
 
 function everyf (s, now) {
   if (!now) now = new Date
@@ -84,6 +93,7 @@ function Mess (str, opts) {
   if (!(this instanceof Mess)) return new Mess(str, opts)
   if (!opts) opts = {}
   this._every = everyf(str, opts.created)
+  this._nth = nthf(str)
   this._created = opts.created
 
   this.title = this._every
@@ -166,6 +176,17 @@ Mess.prototype._advance = function (dir, base) {
     var t = parset('this ' + this._every.day + tt, { now: x })
     if (dir > 0 && t <= base) return null
     else if (dir < 0 && t >= base) return null
+    return t
+  } else if (this._nth) {
+    var t = this._nth.time
+      ? parset(this._nth.time, { now: base })
+      : base
+    t.setDate(this._nth.n)
+    if (dir > 0 && base.getDate() >= t.getDate()) {
+      t.setMonth(t.getMonth() + 1)
+    } else if (dir < 0 && base.getDate() <= t.getDate()) {
+      t.setMonth(t.getMonth() - 1)
+    }
     return t
   }
 }
