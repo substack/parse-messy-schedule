@@ -176,3 +176,51 @@ test('every day next', function (t) {
   ])
   t.end()
 })
+
+test('the 1st', function (t) {
+  var str = 'the 1st'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.next(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-07-01',
+    '2016-08-01',
+    '2016-09-01',
+    '2016-10-01',
+    '2016-11-01',
+    '2016-12-01',
+    '2017-01-01',
+    '2017-02-01',
+    '2017-03-01',
+    '2017-04-01'
+  ])
+  t.end()
+})
+
+test('the 15th', function (t) {
+  var str = 'the 15th'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.prev(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-06-15',
+    '2016-07-15',
+    '2016-08-15',
+    '2016-09-15',
+    '2016-10-15',
+    '2016-11-15',
+    '2016-12-15',
+    '2017-01-15',
+    '2017-02-15',
+    '2017-03-15'
+  ])
+  t.end()
+})
