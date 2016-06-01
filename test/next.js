@@ -36,7 +36,6 @@ test('one-off event (day)', function (t) {
   t.end()
 })
 
-
 test('thursdays', function (t) {
   var str = 'javascript study group thursdays at 7 pm'
   var ev = parse(str, { created: new Date('2015-12-10 03:00') })
@@ -221,6 +220,54 @@ test('the 15th', function (t) {
     '2017-01-15',
     '2017-02-15',
     '2017-03-15'
+  ])
+  t.end()
+})
+
+test('every oct 31st', function (t) {
+  var str = 'every oct 31st'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.next(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-10-31',
+    '2017-10-31',
+    '2018-10-31',
+    '2019-10-31',
+    '2020-10-31',
+    '2021-10-31',
+    '2022-10-31',
+    '2023-10-31',
+    '2024-10-31',
+    '2025-10-31'
+  ])
+  t.end()
+})
+
+test('every oct 31', function (t) {
+  var str = 'every oct 31'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.next(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-10-31',
+    '2017-10-31',
+    '2018-10-31',
+    '2019-10-31',
+    '2020-10-31',
+    '2021-10-31',
+    '2022-10-31',
+    '2023-10-31',
+    '2024-10-31',
+    '2025-10-31'
   ])
   t.end()
 })

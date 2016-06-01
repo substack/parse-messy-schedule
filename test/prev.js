@@ -158,3 +158,51 @@ test('the 15th', function (t) {
   ])
   t.end()
 })
+
+test('every oct 31st', function (t) {
+  var str = 'every oct 31st'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.prev(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-10-31',
+    '2015-10-31',
+    '2014-10-31',
+    '2013-10-31',
+    '2012-10-31',
+    '2011-10-31',
+    '2010-10-31',
+    '2009-10-31',
+    '2008-10-31',
+    '2007-10-31'
+  ])
+  t.end()
+})
+
+test('every oct 31', function (t) {
+  var str = 'every oct 31'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.prev(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-10-31',
+    '2015-10-31',
+    '2014-10-31',
+    '2013-10-31',
+    '2012-10-31',
+    '2011-10-31',
+    '2010-10-31',
+    '2009-10-31',
+    '2008-10-31',
+    '2007-10-31'
+  ])
+  t.end()
+})
