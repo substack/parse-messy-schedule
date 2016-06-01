@@ -100,3 +100,13 @@ test('every day prev chain', function (t) {
   ])
   t.end()
 })
+
+test('every sunday', function (t) {
+  var str = 'every sunday'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d0 = new Date('2016-06-01 00:00')
+  t.equal(strftime('%F', ev.prev(d0)), '2016-05-29') 
+  var d1 = new Date('2016-05-31 00:00')
+  t.equal(strftime('%F', ev.prev(d1)), '2016-05-29') 
+  t.end()
+})
