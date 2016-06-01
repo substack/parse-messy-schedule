@@ -110,3 +110,51 @@ test('every sunday', function (t) {
   t.equal(strftime('%F', ev.prev(d1)), '2016-05-29') 
   t.end()
 })
+
+test('the 1st', function (t) {
+  var str = 'the 1st'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.prev(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-06-01',
+    '2016-05-01',
+    '2016-04-01',
+    '2016-03-01',
+    '2016-02-01',
+    '2016-01-01',
+    '2015-12-01',
+    '2015-11-01',
+    '2015-10-01',
+    '2015-09-01'
+  ])
+  t.end()
+})
+
+test('the 15th', function (t) {
+  var str = 'the 15th'
+  var ev = parse(str, { created: new Date('2016-06-01') })
+  var d = new Date('2016-06-10 00:00')
+  var dates = []
+  for (var i = 0; i < 10; i++) {
+    d = ev.prev(d)
+    dates.push(strftime('%F', d))
+  }
+  t.deepEqual(dates, [
+    '2016-05-15',
+    '2016-04-15',
+    '2016-03-15',
+    '2016-02-15',
+    '2016-01-15',
+    '2015-12-15',
+    '2015-11-15',
+    '2015-10-15',
+    '2015-09-15',
+    '2015-08-15'
+  ])
+  t.end()
+})
