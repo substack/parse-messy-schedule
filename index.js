@@ -17,6 +17,18 @@ re.every = RegExp(
   + '\\s*$',
   'i'
 )
+re.months = RegExp('(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)'
+  + '|may|june?|july?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?'
+  + '|nov(?:ember)|dec(?:ember)?)', 'i'
+)
+var months = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'july',
+  'aug', 'sep', 'oct', 'nov', 'dec' ]
+re.evmonth = RegExp(
+  '(?:(every|each)\\s+)?('
+  + '(\\d+)(?:st|nd|rd|th)?\\s+' + re.months.source
+  + '|' + re.months.source + '\\s+(\\d+)(?:st|nd|rd|th)?\\b)'
+)
+
 re.nth = RegExp('(\\d+)\\s*(?:st|nd|rd|th)\\b')
 re.titleBreak = RegExp(
   '\\b(each|every|tomorrow|'
@@ -32,6 +44,16 @@ function nthf (s) {
     n: m[1],
     time: s.replace(re.nth, '').trim()
   }
+}
+
+function monthf (s) {
+  var m = re.evmonth.exec(s)
+  if (m) return {
+    date: fix(Number(m[3] || m[6])),
+    month: months.indexOf(String(m[4] || m[5]).slice(0,3).toLowerCase()),
+    time: s.replace(re.evmonth, '').trim()
+  }
+  function fix (n) { return isNaN(n) ? undefined : n }
 }
 
 function everyf (s, now) {
@@ -94,6 +116,7 @@ function Mess (str, opts) {
   if (!opts) opts = {}
   this._every = everyf(str, opts.created)
   this._nth = nthf(str)
+  this._month = monthf(str)
   this._created = opts.created
 
   this.title = this._every
@@ -176,6 +199,18 @@ Mess.prototype._advance = function (dir, base) {
     var t = parset('this ' + this._every.day + tt, { now: x })
     if (dir > 0 && t <= base) return null
     else if (dir < 0 && t >= base) return null
+    return t
+  } else if (this._month) {
+    var t = this._month.time
+      ? parset(this._month.time, { now: base })
+      : base
+    if ((this._month.month < base.getMonth()
+    || (this._month.month === base.getMonth()
+    && this._month.date <= base.getDate()))) {
+      t.setFullYear(t.getFullYear() + dir)
+    }
+    t.setMonth(this._month.month)
+    t.setDate(this._month.date)
     return t
   } else if (this._nth) {
     var t = this._nth.time
