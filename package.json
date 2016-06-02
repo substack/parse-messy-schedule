@@ -1,6 +1,6 @@
 {
   "name": "parse-messy-schedule",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "parse recurring or one-off scheduled events from free-form text",
   "main": "index.js",
   "scripts": {
