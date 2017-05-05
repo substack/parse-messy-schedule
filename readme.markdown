@@ -2,6 +2,8 @@
 
 parse recurring or one-off scheduled events from free-form text
 
+[![build status](https://travis-ci.org/substack/parse-messy-schedule.svg)](https://travis-ci.org/substack/parse-messy-schedule)
+
 # example
 
 ``` js
